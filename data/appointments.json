@@ -1,13 +1,5 @@
 [
     {
-        "id": "1",
-        "contactId": "1",
-        "date": "2025-01-31",
-        "time": "19:00",
-        "isPaid": false,
-        "isRecurring": false
-    },
-    {
         "id": "2",
         "contactId": "2",
         "date": "2025-01-31",
