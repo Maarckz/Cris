@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="contacts-section">
+        <div class="contacts-header">
+            <h2>Contatos</h2>
+            <button class="btn btn-primary" onclick="openContactModal()">
+                <span class="icon">+</span> Adicionar Contato
+            </button>
+        </div>
+        <div id="contacts-list" class="contacts-list"></div>
+    </div>
+    
+    <div class="calendar-section">
+        <div class="calendar-header">
+            <button class="btn btn-secondary" onclick="previousWeek()">◀</button>
+            <h2 id="current-week"></h2>
+            <button class="btn btn-secondary" onclick="nextWeek()">▶</button>
+        </div>
+        <div id="calendar" class="calendar"></div>
+    </div>
+</div>
+
+<!-- Modal para Adicionar/Editar Contato -->
+<div id="contact-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeContactModal()">&times;</span>
+        <h2 id="contact-modal-title">Adicionar Contato</h2>
+        <form id="contact-form" onsubmit="handleContactSubmit(event)">
+            <input type="hidden" id="contact-id">
+            <div class="form-group">
+                <label for="name">Nome</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefone</label>
+                <input type="tel" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="approach">Abordagem Psicológica</label>
+                <input type="text" id="approach" required>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-danger" onclick="deleteContact(document.getElementById('contact-id').value, event)">Excluir</button>
+                <button type="button" class="btn btn-secondary" onclick="closeContactModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para Adicionar/Editar Agendamento -->
+<div id="appointment-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAppointmentModal()">&times;</span>
+        <h2 id="appointment-modal-title">Agendar Consulta</h2>
+        <form id="appointment-form" onsubmit="handleAppointmentSubmit(event)">
+            <input type="hidden" id="appointment-id">
+            <input type="hidden" id="appointment-date">
+            <div class="form-group">
+                <label for="contact-select">Contato</label>
+                <select id="contact-select" required></select>
+            </div>
+            <div class="form-group">
+                <label for="time">Horário</label>
+                <input type="text" id="time" class="time-picker" required>
+            </div>
+            <div class="form-group">
+                <label class="switch-label">
+                    <input type="checkbox" id="is-paid">
+                    <span class="switch"></span>
+                    <span class="switch-text">Pago</span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="switch-label">
+                    <input type="checkbox" id="is-recurring">
+                    <span class="switch"></span>
+                    <span class="switch-text">Repetir semanalmente</span>
+                </label>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeAppointmentModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

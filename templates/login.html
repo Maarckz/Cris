@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+   /* Reset básico para remover margens e paddings padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Estilização do container principal de login */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    opacity: 0;
+    animation: fadeIn 0s ease-in forwards;
+}
+
+/* Estilização da caixa de login */
+.login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideIn 0.4s ease-out 0.2s forwards;
+}
+
+/* Título */
+.login-box h1 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+/* Grupo de formulário */
+.form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: fadeSlideIn 0.5s ease-out 0.4s forwards;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Botão de envio */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: white;
+    background-color: #007bff;
+    transition: background 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeSlideIn 0.5s ease-out 0.5s forwards;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Mensagem de erro */
+.error-message {
+    background-color: #ffdddd;
+    color: #d8000c;
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #d8000c;
+    border-radius: 5px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in 0.5s forwards;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+</style>
+<div class="login-container">
+    <div class="login-box">
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
