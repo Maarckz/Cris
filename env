@@ -1,0 +1,2 @@
+FLASK_SECRET_KEY=your-flask-secret-key
+JWT_SECRET_KEY=your-jwt-secret-key
