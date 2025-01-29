@@ -76,13 +76,6 @@ body {
     height: calc(100vh - 64px);
 }
 
-@media (max-width: 768px) {
-    .container {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-    }
-}
-
 /* Seção de Contatos */
 .contacts-section {
     background: white;
@@ -402,3 +395,42 @@ input[type="checkbox"]:checked + .switch::after {
 
 [data-animate-delay="1"] { animation-delay: 0.2s; }
 [data-animate-delay="2"] { animation-delay: 0.4s; }
+
+/* Estilos para mobile */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 1rem;
+        padding: 1rem;
+        height: auto;
+    }
+
+    .calendar-section {
+        order: 1; /* Agenda fica em cima */
+    }
+
+    .contacts-section {
+        order: 2; /* Contatos ficam embaixo */
+    }
+
+    .calendar {
+        grid-template-columns: repeat(5, 1fr); /* Reduz o número de colunas para mobile */
+    }
+
+    .calendar-day {
+        min-height: 80px; /* Reduz a altura dos dias no calendário */
+    }
+
+    .navbar {
+        padding: 1rem;
+    }
+
+    .nav-brand {
+        font-size: 1rem;
+    }
+
+    .nav-link {
+        padding: 0.25rem 0.5rem;
+    }
+}
