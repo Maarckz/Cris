@@ -12,8 +12,12 @@ load_dotenv()  # Carrega variáveis de ambiente do arquivo .env
 app = Flask(__name__)
 
 # Carregar segredos de variáveis de ambiente
-app.secret_key = os.getenv('FLASK_SECRET_KEY')  # Coloque seu segredo em .env
-JWT_SECRET = os.getenv('JWT_SECRET_KEY')  # Coloque seu segredo em .env
+app.secret_key = os.getenv('FLASK_SECRET_KEY')
+
+JWT_SECRET = os.getenv('JWT_SECRET_KEY')  
+print(app.secret_key)
+print(JWT_SECRET)
+
 JWT_EXPIRATION = timedelta(minutes=10)
 
 # Limitação de tentativas de login
