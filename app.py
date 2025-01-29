@@ -151,7 +151,7 @@ def login():
         if user and user['password'] == password:
             token = jwt.encode({'exp': datetime.utcnow() + JWT_EXPIRATION}, JWT_SECRET, algorithm='HS256')
             resp = make_response(redirect(url_for('index')))
-            resp.set_cookie('jwt', token, httponly=True, max_age=600)
+            resp.set_cookie('jwt', token, httponly=True, max_age=1600)
             return resp
         
         # Incrementar as tentativas de login
