@@ -115,14 +115,14 @@ def token_required(f):
     def decorated_function(*args, **kwargs):
         token = request.cookies.get('jwt')
         if not token:
-            return redirect(url_for('login'))
+            return redirect(url_for('login'))  # Redireciona se o token não existir
         
         try:
             jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            return redirect(url_for('login'))
+            return redirect(url_for('login'))  # Redireciona se o token expirar
         except jwt.InvalidTokenError:
-            return redirect(url_for('login'))
+            return redirect(url_for('login'))  # Redireciona se o token for inválido
         
         return f(*args, **kwargs)
     return decorated_function
