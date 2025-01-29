@@ -2,21 +2,26 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, m
 import json
 import os
 import jwt
+import time
+import requests
 from datetime import datetime, timedelta
 from functools import wraps
-import time
 from dotenv import load_dotenv
+import base64
 
-load_dotenv()  # Carrega variáveis de ambiente do arquivo .env
+# Carregar variáveis de ambiente
+load_dotenv()
 
 app = Flask(__name__)
 
 # Carregar segredos de variáveis de ambiente
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
+JWT_SECRET = os.getenv('JWT_SECRET_KEY')
 
-JWT_SECRET = os.getenv('JWT_SECRET_KEY')  
-print(app.secret_key)
-print(JWT_SECRET)
+# Configuração do GitHub
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
+GITHUB_REPO = os.getenv('GITHUB_REPO', 'Maarckz/Cris')
+GITHUB_BRANCH = os.getenv('GITHUB_BRANCH', 'main')
 
 JWT_EXPIRATION = timedelta(minutes=10)
 
@@ -48,17 +53,62 @@ def init_db():
 
 init_db()
 
+def push_to_github(file_path):
+    """ Envia um arquivo para o repositório GitHub via API """
+    github_api_url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{file_path}"
+    
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Obter a versão atual do arquivo no repositório (se existir)
+    response = requests.get(github_api_url, headers=headers)
+    file_sha = None  # SHA do arquivo remoto
+
+    if response.status_code == 200:
+        file_sha = response.json().get("sha")  # Obter SHA do arquivo atual
+
+    # Ler o conteúdo local do arquivo
+    with open(file_path, 'r', encoding='utf-8') as file:
+        content = file.read()
+    
+    encoded_content = base64.b64encode(content.encode()).decode()
+
+    # Criar payload do commit
+    commit_message = f"Update {file_path} via API"
+    data = {
+        "message": commit_message,
+        "content": encoded_content,
+        "branch": GITHUB_BRANCH
+    }
+
+    if file_sha:
+        data["sha"] = file_sha  # Necessário para modificar arquivos existentes
+
+    # Enviar o commit para o GitHub
+    response = requests.put(github_api_url, headers=headers, json=data)
+
+    if response.status_code in [200, 201]:
+        print(f"✅ {file_path} enviado com sucesso para o GitHub!")
+    else:
+        print(f"❌ Erro ao enviar {file_path} para o GitHub:", response.json())
+
 def safe_read_json(file_path):
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read().strip()
             return json.loads(content) if content else []
     except json.JSONDecodeError:
         return []
 
 def safe_write_json(file_path, data):
-    with open(file_path, 'w') as f:
+    with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4)
+    
+    # Enviar alterações para o GitHub após escrita
+    if file_path in [CONTACTS_DB, APPOINTMENTS_DB]:
+        push_to_github(file_path)
 
 def token_required(f):
     @wraps(f)
@@ -155,6 +205,7 @@ def contacts():
 @token_required
 def contact(contact_id):
     contacts = safe_read_json(CONTACTS_DB)
+    appointments = safe_read_json(APPOINTMENTS_DB)
     
     if request.method == 'PUT':
         data = request.get_json()
@@ -164,7 +215,17 @@ def contact(contact_id):
                 break
     
     elif request.method == 'DELETE':
+        # Remove o contato
         contacts = [c for c in contacts if c['id'] != contact_id]
+        
+        # Remove todos os compromissos associados ao contactId
+        appointments = [a for a in appointments if a['contactId'] != contact_id]
+        
+        # Salva as alterações nos arquivos
+        safe_write_json(CONTACTS_DB, contacts)
+        safe_write_json(APPOINTMENTS_DB, appointments)
+        
+        return jsonify({'success': True, 'message': 'Contact and associated appointments deleted successfully'})
     
     safe_write_json(CONTACTS_DB, contacts)
     return jsonify({'success': True})
@@ -214,5 +275,3 @@ def appointment(appointment_id):
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
-    #openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout ssl/key.pem -out ssl/cert.pem
-    #app.run(debug=False, host='0.0.0.0', port=5000, ssl_context=('ssl/cert.pem', 'ssl/key.pem'))
