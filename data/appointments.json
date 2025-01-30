@@ -46,5 +46,13 @@
         "time": "19:00",
         "isPaid": false,
         "isRecurring": true
+    },
+    {
+        "id": "7",
+        "contactId": "17",
+        "date": "2025-02-04",
+        "time": "21:00",
+        "isPaid": false,
+        "isRecurring": true
     }
 ]
