@@ -5,6 +5,6 @@
         "date": "2025-02-01",
         "time": "19:00",
         "isPaid": false,
-        "isRecurring": false
+        "isRecurring": true
     }
 ]
