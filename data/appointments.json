@@ -30,5 +30,13 @@
         "time": "07:00",
         "isPaid": false,
         "isRecurring": true
+    },
+    {
+        "id": "5",
+        "contactId": "13",
+        "date": "2025-02-04",
+        "time": "18:00",
+        "isPaid": false,
+        "isRecurring": true
     }
 ]
