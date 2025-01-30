@@ -25,17 +25,9 @@
     },
     {
         "id": "4",
-        "contactId": "2",
-        "date": "2025-02-03",
-        "time": "13:30",
-        "isPaid": false,
-        "isRecurring": true
-    },
-    {
-        "id": "5",
-        "contactId": "4",
-        "date": "2025-02-03",
-        "time": "19:00",
+        "contactId": "5",
+        "date": "2025-02-04",
+        "time": "07:00",
         "isPaid": false,
         "isRecurring": true
     }
