@@ -96,14 +96,6 @@
         "isRecurring": false
     },
     {
-        "id": "13",
-        "contactId": "4",
-        "date": "2025-01-27",
-        "time": "19:00",
-        "isPaid": false,
-        "isRecurring": true
-    },
-    {
         "id": "14",
         "contactId": "2",
         "date": "2025-01-27",
