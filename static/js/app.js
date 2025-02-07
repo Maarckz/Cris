@@ -336,8 +336,8 @@ function sendWhatsAppConfirmation(appointmentId, event) {
 
     // Usando '\n' para garantir que encodeURIComponent converta corretamente para %0A
     const message = encodeURIComponent(
-        `Oi ${contact.name}, boa tarde, como vc está hj?\n\n` +
-        `Espero que esteja bem😉😉 .\n\n` +
+        `Oi ${contact.name}, boa tarde, como vc está hj?\n` +
+        `Espero que esteja bem😉😉 .\n` +
         `Confirma nossa sessão hj às ${appointment.time}?`
     );
 
