@@ -335,10 +335,11 @@ function sendWhatsAppConfirmation(appointmentId, event) {
     if (!contact) return;
 
     const message = encodeURIComponent(
-        `Olá, boa tarde ${contact.name}. Passando para confirmar nossa sessão para ${
-            new Date(appointment.date).toLocaleDateString('pt-BR')
-        } às ${appointment.time}h.`
-    );
+    `Oi ${contact.name}, boa tarde, como vc está hj?%0A`
+    + `Espero que esteja bem😉😉 .%0A`
+    + `Confirma nossa sessão hj às ${appointment.time}?`
+);
+
 
     const phone = contact.phone.replace(/\D/g, '');
     window.open(`https://api.whatsapp.com/send?phone=55${phone}&text=${message}`, '_blank');
